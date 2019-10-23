@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app:latest
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www
+    links:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_DATABASE: bp
+      DB_USERNAME: bpuser
+      DB_PASSWORD: bppassword
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_DATABASE: bp
+      MYSQL_USER: bpuser
+      MYSQL_PASSWORD: bppassword
+      MYSQL_ROOT_PASSWORD: password
