@@ -21,5 +21,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
 
         Route::post('register', 'RegisterController')->name('register');
     });
+
+    Route::post('users/{id}/avatar', 'UserAvatarController@store')->name('user.avatar.store');
+    Route::delete('users/{id}/avatar', 'UserAvatarController@destroy')->name('user.avatar.destroy');
+    Route::get('users/{id}/avatar', 'UserAvatarController@show')->name('user.avatar.show');
+    Route::get('users/{id}/avatar/thumb', 'UserAvatarController@showThumb')->name('user.avatar.showThumb');
+    Route::apiResource('/users', 'UserController');
 });
 
