@@ -12,14 +12,20 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function ($router) {
-        Route::post('login', 'AuthController@login');
-        Route::post('logout', 'AuthController@logout');
-        Route::post('refresh', 'AuthController@refresh');
-        Route::get('me', 'AuthController@me');
+        Route::post('check-username', 'AuthController@checkUsername')->name('auth.checkUsername');
+        Route::post('login', 'AuthController@login')->name('auth.login');
+        Route::post('logout', 'AuthController@logout')->name('auth.logout');
+        Route::post('refresh', 'AuthController@refresh')->name('auth.refresh');
+        Route::get('me', 'AuthController@me')->name('auth.me');
 
         Route::post('register', 'RegisterController')->name('register');
+        Route::post('forgot-password', 'ForgotPasswordController')->name('forgotPassword');
+        Route::post('reset-password', 'ResetPasswordController')->name('resetPassword');
+        Route::post('verification/verify', 'VerificationController@verify')->name('verification.verify');
+        Route::post('verification/resend', 'VerificationController@resend')->name('verification.resend');
     });
 
     Route::post('users/{id}/avatar', 'UserAvatarController@store')->name('user.avatar.store');
@@ -29,3 +35,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
     Route::apiResource('/users', 'UserController');
 });
 
+
+Route::get('v1/test', function () {
+    return response()->json([
+        'data' => 'sample data',
+    ]);
+});

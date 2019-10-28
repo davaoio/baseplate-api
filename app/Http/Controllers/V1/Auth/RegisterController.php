@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\V1\Auth;
 
-use App\Http\Requests\UserRegisterRequest;
+use DB;
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
-use JWTAuth;
+use App\Actions\SendVerificationCode;
+use App\Http\Requests\RegisterUserRequest;
 
 class RegisterController extends Controller
 {
@@ -32,13 +33,22 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function __invoke(UserRegisterRequest $request)
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param \App\Http\Requests\RegisterUserRequest
+     * @return \App\Http\Resources\UserResource
+     */
+    public function __invoke(RegisterUserRequest $request, SendVerificationCode $sendVerificationCode)
     {
         DB::beginTransaction();
         try {
             $user = User::create([
-                'email' => $request->get('email', null),
-                'password' => Hash::make($request->password),
+                'first_name'   => $request->first_name,
+                'last_name'    => $request->last_name,
+                'email'        => $request->get('email', null),
+                'phone_number' => $request->get('phone_number', null),
+                'password'     => Hash::make($request->password),
             ]);
 
             DB::commit();
@@ -47,8 +57,8 @@ class RegisterController extends Controller
             throw $e;
         }
 
-        $token = JWTAuth::fromUser($user);
+        $sendVerificationCode->execute($user);
 
-        return $this->respondWithToken($token, $user->fresh());
+        return new UserResource($user);
     }
 }

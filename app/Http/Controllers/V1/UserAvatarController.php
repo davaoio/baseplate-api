@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Resources\MediaResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MediaResource;
 
 class UserAvatarController extends Controller
 {
@@ -22,7 +22,7 @@ class UserAvatarController extends Controller
     /**
      * Download user avatar
      *
-     * @param int $id User ID
+     * @param  int  $id User ID
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -40,7 +40,7 @@ class UserAvatarController extends Controller
     /**
      * Download user avatart thumbnail
      *
-     * @param int $id User ID
+     * @param  int  $id User ID
      * @return \Illuminate\Http\Response
      */
     public function showThumb($id)
@@ -59,20 +59,20 @@ class UserAvatarController extends Controller
      * Store new user avatar
      *
      * @param int $id User ID
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request  $request
      * @return MediaResource
      */
     public function store($id, Request $request)
     {
         $data = $request->validate([
-            'avatar' => 'required|image',
+            'avatar' => 'required|image'
         ]);
 
         $user = User::findOrFail($id);
 
         // Hashing file name
-        $name = md5(uniqid('AVATAR' . $user->id, true));
-        $fileName = $name . '.' . $data['avatar']->extension();
+        $name = md5(uniqid('AVATAR'.$user->id, true));
+        $fileName = $name.'.'.$data['avatar']->extension();
 
         $avatar = $user->addMedia($data['avatar'])
             ->usingName($name)

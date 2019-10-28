@@ -10,3 +10,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/.idea/baseplate-api.iml
+/.idea/php.xml
+/.idea/workspace.xml

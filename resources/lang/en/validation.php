@@ -128,11 +128,26 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+    'reset_password_token' => [
+        'not_exists' => 'The :attribute does not exist.',
+        'invalid' => 'The :attribute is invalid',
+        'expired' => 'The :attribute has already expired.',
     ],
+
+    'email_verification_token' => [
+        'not_match' => 'The provided token does not match the email verification code on your account.',
+    ],
+    'phone_number_verification_token' => [
+        'not_match' => 'The provided token does not match the phone number verification code on your account.',
+    ],
+    'verification' => [
+        'email_not_found' => 'You have no email in your account.',
+        'phone_number_not_found' => 'You have no phone number in your account.',
+        'email_token_not_match' => 'The provided token does not match the email verification code on your account.',
+        'phone_number_token_not_match' => 'The provided token does not match the phone number verification code on your account.',
+    ],
+
+    'valid_phone_number' => 'The :attribute must be a valid phone number.',
 
     /*
     |--------------------------------------------------------------------------

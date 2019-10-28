@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\V1\Auth;
 
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Actions\SendVerificationCode;
+use App\Http\Requests\VerificationRequest;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Enums\UsernameType;
+use App\Http\Requests\ResendVerificationRequest;
 
 class VerificationController extends Controller
 {
@@ -21,13 +27,6 @@ class VerificationController extends Controller
     use VerifiesEmails;
 
     /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,7 +34,41 @@ class VerificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        $this->middleware('throttle:6,1');
+    }
+
+    /**
+     * Verify user email or phone number
+     *
+     * @param VerificationRequest $request
+     * @return UserResource
+     */
+    public function verify(VerificationRequest $request)
+    {
+        $user = $request->user();
+
+        if ($request->via == UsernameType::EMAIL) {
+            $user->email_verified_at = Carbon::now();
+        } else {
+            $user->phone_number_verified_at = Carbon::now();
+        }
+
+        $user->save();
+
+        return new UserResource($user);
+    }
+
+    /**
+     * Resent Verification via email
+     *
+     * @return UserResource
+     */
+    public function resend(ResendVerificationRequest $request, SendVerificationCode $sendVerificationCode)
+    {
+        $user = $request->user();
+
+        $sendVerificationCode->execute($user, $request->via);
+
+        return new UserResource($user);
     }
 }

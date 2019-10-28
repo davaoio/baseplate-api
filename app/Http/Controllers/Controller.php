@@ -6,7 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Arr;
+use App\Enums\ErrorCodes;
 
 class Controller extends BaseController
 {
@@ -15,22 +15,32 @@ class Controller extends BaseController
     /**
      * Get the token array structure.
      *
-     * @param string $token
+     * @param  string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token, $user = null)
+    protected function respondWithToken($token, $uuid = null)
     {
-        $data = [
+        return response()->json(['data' => [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ];
+            'expires_in' => auth()->factory()->getTTL() * config('jwt.ttl'),
+            'uuid' => $uuid
+        ]])->header('Authorization', $token);
+    }
 
-        if ($user) {
-            $data['user'] = $user;
-        }
-
-        return response()->json($data);
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithError($errorCode, $statusCode = 400)
+    {
+        return response()->json([
+            'message' => ErrorCodes::getDescription($errorCode),
+            'error_code' => $errorCode,
+        ], $statusCode);
     }
 }

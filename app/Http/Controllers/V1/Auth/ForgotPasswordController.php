@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\V1\Auth;
 
+use Illuminate\Http\Request;
+use App\Models\PasswordReset;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\PasswordResetResource;
+use App\Mail\PasswordReset as PasswordResetMail;
 
 class ForgotPasswordController extends Controller
 {
@@ -18,8 +22,6 @@ class ForgotPasswordController extends Controller
     |
     */
 
-    use SendsPasswordResetEmails;
-
     /**
      * Create a new controller instance.
      *
@@ -28,5 +30,28 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    /**
+     * Create a new password reset instance for reseting password.
+     * And send password reset email to user
+     *
+     * @param \Illuminate\Http\Request
+     * @return \App\Http\Resources\PasswordResetResource
+     */
+    public function __invoke(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'exists:users'],
+        ]);
+
+        $passwordReset = PasswordReset::create([
+            'email' => $data['email'],
+        ]);
+
+        Mail::to($passwordReset->email)
+            ->send(new PasswordResetMail($passwordReset));
+
+        return new PasswordResetResource($passwordReset);
     }
 }
