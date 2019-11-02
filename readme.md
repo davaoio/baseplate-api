@@ -6,11 +6,7 @@ This will require composer on your machine.
 * run `cd baseplate-api` to get inside the project folder
 * run `docker-compose up --build` to build the images
 * run `composer install` to install dependencies
-* Setup `.env` file
-    * Create a `.env` file if there's none yet.
-    * Copy the contents from `.env.example` and paste it in the `.env` file you created.
-    * Usually the only thing you need to setup here are the database credentials which I already setup based on docker settings.
-    * If those are changed, then change accordingly.
+* run `cp env-example .env` to copy the environment file
 * run `docker exec -it app bash` to get inside the docker bash
 * Setup Database inside docker
     * I do this by connecting through a 3rd party application like HeidiSQL/SequelPro
