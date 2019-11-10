@@ -26,22 +26,14 @@ class RegisterUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'        => [
+            'email' => [
                 Rule:: requiredIf(empty($this->phone_number)),
                 'bail',
                 'email',
                 'max:255',
                 'unique:users'
             ],
-            'phone_number' => [
-                Rule:: requiredIf(empty($this->email)),
-                'bail',
-                new ValidPhoneNumber,
-                'unique:users'
-            ],
-            'first_name'   => ['required', 'string', 'max:255'],
-            'last_name'    => ['required', 'string', 'max:255'],
-            'password'     => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }
