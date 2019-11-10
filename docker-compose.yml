@@ -12,11 +12,13 @@ services:
       - .:/var/www
     links:
       - mysql
+      - redis
     environment:
       DB_HOST: mysql
       DB_DATABASE: bp
       DB_USERNAME: bpuser
       DB_PASSWORD: bppassword
+      REDIS_URL: redis://cache
   mysql:
     image: mysql:5.7
     ports:
@@ -26,3 +28,8 @@ services:
       MYSQL_USER: bpuser
       MYSQL_PASSWORD: bppassword
       MYSQL_ROOT_PASSWORD: password
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
