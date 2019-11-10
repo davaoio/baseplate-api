@@ -36,19 +36,18 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param \App\Http\Requests\RegisterUserRequest
-     * @return \App\Http\Resources\UserResource
+     * @param RegisterUserRequest $request
+     * @param SendVerificationCode $sendVerificationCode
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function __invoke(RegisterUserRequest $request, SendVerificationCode $sendVerificationCode)
     {
         DB::beginTransaction();
         try {
             $user = User::create([
-                'first_name'   => $request->first_name,
-                'last_name'    => $request->last_name,
-                'email'        => $request->get('email', null),
-                'phone_number' => $request->get('phone_number', null),
-                'password'     => Hash::make($request->password),
+                'email' => $request->get('email', null),
+                'password' => Hash::make($request->password),
             ]);
 
             DB::commit();
@@ -59,6 +58,8 @@ class RegisterController extends Controller
 
         $sendVerificationCode->execute($user);
 
-        return new UserResource($user);
+        $user = $user->refresh();
+
+        return $this->respondWithToken(auth()->login($user), new UserResource($user));
     }
 }

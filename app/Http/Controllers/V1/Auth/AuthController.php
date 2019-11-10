@@ -35,22 +35,21 @@ class AuthController extends Controller
     }
 
     /**
-     * Check if username exist
+     * Check if email exist
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function checkUsername(Request $request)
+    public function checkEmail(Request $request)
     {
-        $data = $request->validate(['username' => 'required']);
+        $data = $request->validate(['email' => 'required']);
 
-        $user = User::where('email', $data['username'])
-            ->orWhere('phone_number', User::cleanPhoneNumber($data['username']))
+        $user = User::where('email', $data['email'])
             ->first();
 
         if ($user) {
             return response()->json([
-                'data' => ['username' => $data['username']]
+                'data' => ['email' => $data['email']]
             ]);
         }
 
@@ -60,22 +59,22 @@ class AuthController extends Controller
     /**
      * Get a JWT via given credentials.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
         $data = $request->validate([
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $data['username'])
-            ->orWhere('phone_number', User::cleanPhoneNumber($data['username']))
+        $user = User::where('email', $data['email'])
             ->first();
 
         if ($user && Hash::check($data['password'], $user->password)) {
             $token = auth()->login($user);
-            return $this->respondWithToken($token);
+            return $this->respondWithToken($token, new UserResource($user));
         }
 
         return $this->respondWithError(ErrorCodes::INVALID_PASSWORD, 401);
@@ -88,7 +87,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return new UserResource(auth()->user()->load('avatar'));
+        return new UserResource(auth()->user());
     }
 
     /**

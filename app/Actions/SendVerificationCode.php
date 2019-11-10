@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Actions;
 
 use App\Models\User;
@@ -21,21 +22,11 @@ class SendVerificationCode
      * @param string $via [email, phone_number]
      * @return void
      */
-    public function execute(User $user, string $via = null)
+    public function execute(User $user)
     {
         $this->user = $user;
 
-        if ($via == 'email') {
-            return $this->sendCodeViaEmail();
-        } elseif ($via == 'phone_number') {
-            return $this->sendCodeViaPhoneNumber();
-        } else {
-            if (!empty($this->user->email)) {
-                return $this->sendCodeViaEmail();
-            } elseif (!empty($this->user->phone_number)) {
-                return $this->sendCodeViaPhoneNumber();
-            }
-        }
+        return $this->sendCodeViaEmail();
     }
 
     /**
@@ -47,18 +38,6 @@ class SendVerificationCode
     {
         if (!$this->user->isEmailVerified()) {
             $this->user->notify(new VerifyEmail());
-        }
-    }
-
-    /**
-     * Send verification code to user via sms
-     *
-     * @return void
-     */
-    private function sendCodeViaPhoneNumber()
-    {
-        if (!$this->user->isPhoneNumberVerified()) {
-            $this->user->notify(new VerifyPhoneNumber());
         }
     }
 }

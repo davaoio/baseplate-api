@@ -29,7 +29,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMe
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'phone_number',
+        'first_name', 'last_name', 'email', 'password',
     ];
 
     /**
@@ -38,7 +38,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMe
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email_verification_code', 'phone_number_verification_code',
+        'password', 'remember_token', 'email_verification_code',
     ];
 
     /**

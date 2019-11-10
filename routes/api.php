@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function ($router) {
-        Route::post('check-username', 'AuthController@checkUsername')->name('auth.checkUsername');
+        Route::post('check-username', 'AuthController@checkEmail')->name('auth.checkEmail');
         Route::post('login', 'AuthController@login')->name('auth.login');
         Route::post('logout', 'AuthController@logout')->name('auth.logout');
         Route::post('refresh', 'AuthController@refresh')->name('auth.refresh');
