@@ -5,20 +5,13 @@ This will require composer on your machine.
 
 * run `cd baseplate-api` to get inside the project folder
 * run `docker-compose up --build` to build the images
-* run `composer install` to install dependencies
-* run `cp env-example .env` to copy the environment file
-* run `docker exec -it app bash` to get inside the docker bash
-* Create database with this command `CREATE DATABASE bp;`
-* Setup Database inside docker
-    * I do this by connecting through a 3rd party application like HeidiSQL/SequelPro
-    * `hostname/IP: 127.0.0.1`, `user: root`, `password: password`, `port: 13306`
-    * Settings can be found inside the `docker-compose.yml` file
-    * Once connected, I then create a database through the application
-* run `php artisan migrate` to run database migrations
-* run `php artisan key:generate` to run laravel's key generator for the application
-* run `php artisan jwt:secret` to run `tymon/JWT` key generator
-* You can also seed the database for some dummy users with this `php artisan db:seed --class=DevelopmentSeeder` (optional)
-* run `php artisan app:acl:sync` *unfinished* (optional)
+* run `docker exec -it app /var/www/composer.phar install` to install dependencies
+* run `docker exec -it app cp env-example .env` to copy the environment file
+* run `docker exec -it app php artisan migrate` to run database migrations
+* run `docker exec -it app php artisan key:generate` to run laravel's key generator for the application
+* run `docker exec -it app php artisan jwt:secret` to run `tymon/JWT` key generator
+* run `docker exec -it app php artisan db:seed --class=DevelopmentSeeder` 
+
 
 ----------
 Go to `localhost:8080` to check if it's running.
