@@ -11,13 +11,11 @@ services:
       - ./backend-api:/var/www
     links:
       - mysql
-      - redis
     environment:
       DB_HOST: mysql
       DB_DATABASE: bp
       DB_USERNAME: bpuser
       DB_PASSWORD: bppassword
-      REDIS_URL: redis://cache
     expose:
       - ${API_SERVER_PORT}
   mysql:
