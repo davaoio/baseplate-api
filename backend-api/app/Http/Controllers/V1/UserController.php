@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\UpdateUserRequest;
+use phpDocumentor\Reflection\Types\Collection;
 
 class UserController extends Controller
 {
@@ -19,7 +20,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index']);
     }
 
     /**
@@ -29,16 +30,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = QueryBuilder::for(User::class)
-            ->allowedIncludes('avatar')
-            ->allowedSorts('first_name', 'last_name', 'created_at')
-            ->allowedFilters([
-                Filter::scope('search'),
-            ])
-            ->defaultSort('first_name')
-            ->paginate(request('limit', 10));
+        $users = User::all();
 
-        return UserResource::collection($users);
+        return view('welcome', compact('users'));
     }
 
     /**
