@@ -10,10 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['namespace' => 'V1'], function () {
+    Route::get('/', 'UserController@index');
 });
+
 
 Route::get('/login', function () {
     return File::get(public_path() . '/login.html');
