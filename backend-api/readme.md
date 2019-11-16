@@ -8,6 +8,7 @@ This will require composer on your machine.
 * run `composer install` to install dependencies
 * run `cp env-example .env` to copy the environment file
 * run `docker exec -it app bash` to get inside the docker bash
+* Create database with this command `CREATE DATABASE bp;`
 * Setup Database inside docker
     * I do this by connecting through a 3rd party application like HeidiSQL/SequelPro
     * `hostname/IP: 127.0.0.1`, `user: root`, `password: password`, `port: 13306`

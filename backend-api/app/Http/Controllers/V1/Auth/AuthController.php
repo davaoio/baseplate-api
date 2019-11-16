@@ -66,7 +66,7 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'email' => 'required',
-            'password' => 'required',
+        'password' => 'required',
         ]);
 
         $user = User::where('email', $data['email'])
@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         if ($user && Hash::check($data['password'], $user->password)) {
             $token = auth()->login($user);
-            return $this->respondWithToken($token, new UserResource($user));
+            return $this->respondWithToken($token);
         }
 
         return $this->respondWithError(ErrorCodes::INVALID_PASSWORD, 401);
