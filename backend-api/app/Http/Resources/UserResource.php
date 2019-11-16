@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'avatar_url' => route('user.avatar.show', ['id' => $this->id]),
             'avatar_thumb_url' => route('user.avatar.showThumb', ['id' => $this->id]),
             'mine' => $this->id == optional(auth()->user())->id,
-            'avatar' => $this->whenLoaded('avatar', new MediaResource($this->avatar)),
+            'avatar' => $this->whenLoaded('avatar', new MediaResource($this->avatar))
         ];
     }
 }
