@@ -30,8 +30,3 @@ services:
       MYSQL_USER: bpuser
       MYSQL_PASSWORD: bppassword
       MYSQL_ROOT_PASSWORD: password
-  redis:
-    image: redis
-    container_name: cache
-    expose:
-      - 6379
