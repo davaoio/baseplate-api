@@ -4,6 +4,7 @@ services:
     container_name: app
     build:
       context: ./backend-api
+      dockerfile: Dockerfile-dev
     image: app:latest
     ports:
       - ${API_SERVER_PORT}:80
