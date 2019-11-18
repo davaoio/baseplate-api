@@ -18,8 +18,6 @@ RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'a5c698ffe4b8e849a
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 RUN composer install
-RUN php artisan key:generate
-RUN php artisan jwt:secret
 
 EXPOSE 80
 
