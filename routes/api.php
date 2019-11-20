@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
+    Route::get('ping', function () {
+        return response()->json()->setStatusCode(200);
+    });
+
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function ($router) {
         Route::post('check-username', 'AuthController@checkEmail')->name('auth.checkEmail');
         Route::post('login', 'AuthController@login')->name('auth.login');
